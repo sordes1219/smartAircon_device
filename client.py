@@ -89,17 +89,19 @@ def customShadowCallback_DeltaUpdate(payload, responseStatus, token):
     if delta:
         # 動作モード、停止の確認
         for value in action_mode:
+            # 初期値(0)をセット
+            d1[value] = 0
             if delta.get(value) == 1:
                 cmd = "python3 irrp.py -p -g17 -f codes aircon:{}".format(value)
                 # subprocess.check_call(cmd.split())
                 d1[value] = 1
                 logger.info("turn on {}".format(value))
 
-            elif delta.get(value) == 0:
-                cmd = "python3 irrp.py -p -g17 -f codes aircon:pwr_off"
-                # subprocess.check_call(cmd.split())
-                d1[value] = 0
-                logger.info("turn off {}".format(value))
+        # all0なら停止
+        if sum(d1.values()) == 0:
+            cmd = "python3 irrp.py -p -g17 -f codes aircon:pwr_off"
+            # subprocess.check_call(cmd.split())
+            logger.info("turn off {}".format(value))
 
         # タイマーモードの確認、動作設定
         for value in timer_mode:
