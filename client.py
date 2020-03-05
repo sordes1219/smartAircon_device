@@ -9,7 +9,7 @@ import json
 from logs import Applogger
 import subprocess
 import RPi.GPIO as GPIO
-from DHT11_Python import dht11
+import dht11
 
 # Init Logger
 applogger = Applogger(__name__)
@@ -36,7 +36,7 @@ humidity = 50
 myAWSIoTMQTTShadowClient = None
 myAWSIoTMQTTShadowClient = AWSIoTMQTTShadowClient("smartRemocon")
 myAWSIoTMQTTShadowClient.configureEndpoint("a1xfsi89ntz6zn-ats.iot.us-east-1.amazonaws.com", 8883)
-myAWSIoTMQTTShadowClient.configureCredentials(r"/opt/cert/rootCA.pem", r"/opt/cert/private.pem.key", r"/opt/cert/certificate.pem.crt")
+myAWSIoTMQTTShadowClient.configureCredentials(r"/opt/smartAircon_device/cert/rootCA.pem", r"/opt/smartAircon_device/cert/private.pem.key", r"/opt/smartAircon_device/cert/certificate.pem.crt")
 
 # AWSIoTMQTTShadowClient connection configuration
 myAWSIoTMQTTShadowClient.configureAutoReconnectBackoffTime(1, 32, 20)
