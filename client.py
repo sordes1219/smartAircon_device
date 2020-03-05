@@ -93,14 +93,14 @@ def customShadowCallback_DeltaUpdate(payload, responseStatus, token):
             d1[value] = 0
             if delta.get(value) == 1:
                 cmd = "python3 irrp.py -p -g17 -f codes aircon:{}".format(value)
-                # subprocess.check_call(cmd.split())
+                subprocess.check_call(cmd.split())
                 d1[value] = 1
                 logger.info("turn on {}".format(value))
 
         # all0なら停止
         if sum(d1.values()) == 0:
-            cmd = "python3 irrp.py -p -g17 -f codes aircon:pwr_off"
-            # subprocess.check_call(cmd.split())
+            cmd = "python3 irrp.py -p -g17 -f codes aircon:stop"
+            subprocess.check_call(cmd.split())
             logger.info("turn off {}".format(value))
 
         # タイマーモードの確認、動作設定
@@ -160,11 +160,11 @@ while True:
                         cmd = "python3 irrp.py -p -g17 -f codes aircon:heating"
                     else:
                         cmd = "python3 irrp.py -p -g17 -f codes aircon:cooler"
-                    # subprocess.check_call(cmd.split())
+                    subprocess.check_call(cmd.split())
                     logger.info("turn on aircon")
                 elif value == "off":
                     cmd = "python3 irrp.py -p -g17 -f codes aircon:stop"
-                    # subprocess.check_call(cmd.split())
+                    subprocess.check_call(cmd.split())
                     logger.info("turn off aircon")
 
     # Send air condition per 60sec
