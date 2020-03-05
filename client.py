@@ -168,7 +168,7 @@ while True:
                     logger.info("turn off aircon")
 
     # Send air condition per 60sec
-    time.sleep(60)
+    time.sleep(10)
     result = instance.read()
     if result.is_valid():
         temperature = result.temperature
