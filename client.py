@@ -28,7 +28,7 @@ instance = dht11.DHT11(pin=14)
 action_mode = ["heating","cooler","blast","dry"]
 timer_mode = ["on","off"]
 timer_value = ["ontime","offtime"]
-timer_setting = {"on":{"active":0,"ontime":"09:00"},"off":{"active":0,"offtime":"09:00"}}
+timer_setting = {"on":{"active":0,"ontime":"09:00"},"off":{"active":0,"offtime":"10:00"}}
 temperature = 20
 humidity = 50
 
@@ -101,7 +101,7 @@ def customShadowCallback_DeltaUpdate(payload, responseStatus, token):
         if sum(d1.values()) == 0:
             cmd = "python3 irrp.py -p -g17 -f codes aircon:stop"
             subprocess.check_call(cmd.split())
-            logger.info("turn off {}".format(value))
+            logger.info("turn off aircon")
 
         # タイマーモードの確認、動作設定
         for value in timer_mode:
@@ -115,9 +115,9 @@ def customShadowCallback_DeltaUpdate(payload, responseStatus, token):
             if delta.get(value) != None:
                 d1[value] = delta.get(value)
                 if "on" in value:
-                    timer_setting["on"][value] = datetime.datetime.strptime(delta.get(value),"%H:%M").time()
+                    timer_setting["on"][value] = delta.get(value)
                 elif "off" in value:
-                    timer_setting["off"][value] = datetime.datetime.strptime(delta.get(value),"%H:%M").time()
+                    timer_setting["off"][value] = delta.get(value)
                 logger.info("set {} at {}".format(value,delta.get(value)))
 
     # Create message payload
@@ -136,7 +136,7 @@ logger.debug('connect to shadow')
 deviceShadowHandler = myAWSIoTMQTTShadowClient.createShadowHandlerWithName('smartRemocon', True)
 
 # Create message payload
-payload = {"state":{"reported":{"heating":0,"cooler":0,"blast":0,"dry":0,"on":0,"off":0,"ontime":"09:00","offtime":"09:00"}}}
+payload = {"state":{"reported":{"heating":0,"cooler":0,"blast":0,"dry":0,"on":0,"off":0,"ontime":"09:00","offtime":"10:00"}}}
 
 # Delete old Shadow
 deviceShadowHandler.shadowDelete(customShadowCallback_Delete, 5)
@@ -152,7 +152,7 @@ while True:
     for value in timer_mode:
         if timer_setting[value]["active"] == 1:
             nowtime = datetime.datetime.now()
-            settime = datetime.datetime.combine(nowtime.date(),timer_setting[value][value + "time"])
+            settime = datetime.datetime.combine(nowtime.date(),datetime.datetime.strptime(timer_setting[value][value + "time"],"%H:%M").time())
             deltatime = nowtime - settime
             if abs(deltatime.total_seconds()) < 60:
                 if value == "on":
