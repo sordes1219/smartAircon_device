@@ -176,5 +176,5 @@ while True:
         logger.info("Temperature: %-3.1f C" % temperature)
         logger.info("Humidity: %-3.1f %%" % humidity)
 
-        payload = {"state":{"reported":{"temp":temperature,"humidity":humidity}}}
+        payload = {"state":{"reported":{"temp":temperature,"humid":humidity}}}
         deviceShadowHandler.shadowUpdate(json.dumps(payload),customShadowCallback_Update, 5)
