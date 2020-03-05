@@ -36,7 +36,7 @@ humidity = 50
 myAWSIoTMQTTShadowClient = None
 myAWSIoTMQTTShadowClient = AWSIoTMQTTShadowClient("smartRemocon")
 myAWSIoTMQTTShadowClient.configureEndpoint("a1xfsi89ntz6zn-ats.iot.us-east-1.amazonaws.com", 8883)
-myAWSIoTMQTTShadowClient.configureCredentials(r"cert/rootCA.pem", r"cert/private.pem.key", r"cert/certificate.pem.crt")
+myAWSIoTMQTTShadowClient.configureCredentials(r"/opt/cert/rootCA.pem", r"/opt/cert/private.pem.key", r"/opt/cert/certificate.pem.crt")
 
 # AWSIoTMQTTShadowClient connection configuration
 myAWSIoTMQTTShadowClient.configureAutoReconnectBackoffTime(1, 32, 20)
