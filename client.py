@@ -99,13 +99,14 @@ def customShadowCallback_DeltaUpdate(payload, responseStatus, token):
                     subprocess.check_call(cmd.split())
                     logger.info("turn on {}".format(value))
                     device_shadow["state"]["reported"][value] = delta.get(value)
+                    zero_counter -= 1
 
                 elif delta.get(value) == 0:
                     device_shadow["state"]["reported"][value] = delta.get(value)
                     zero_counter += 1
 
-        # zero_counter=4なら停止
-        if zero_counter == 4:
+        # zero_counter!=0なら停止
+        if zero_counter != 0:
             cmd = "python3 irrp.py -p -g17 -f codes aircon:stop"
             subprocess.check_call(cmd.split())
             logger.info("turn off aircon")
