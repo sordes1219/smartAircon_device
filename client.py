@@ -29,7 +29,6 @@ instance = dht11.DHT11(pin=14)
 action_mode = ["heating","cooler","blast","dry"]
 timer_mode = ["on","off"]
 timer_value = ["ontime","offtime"]
-timer_setting = {"on":{"active":0,"ontime":"09:00"},"off":{"active":0,"offtime":"10:00"}}
 temperature = 20
 humidity = 50
 device_shadow = {"state":{"reported":{"heating":0,"cooler":0,"blast":0,"dry":0,"on":0,"off":0,"ontime":"09:00","offtime":"10:00"}}}
@@ -115,17 +114,12 @@ def customShadowCallback_DeltaUpdate(payload, responseStatus, token):
         for value in timer_mode:
             if delta.get(value) != None:
                 device_shadow["state"]["reported"][value] = delta.get(value)
-                timer_setting[value]["active"] = delta.get(value)
                 logger.info("set {}timer {}".format(value,delta.get(value)))
 
         # タイマー時刻の確認、動作設定
         for value in timer_value:
             if delta.get(value) != None:
                 device_shadow["state"]["reported"][value] = delta.get(value)
-                if "on" in value:
-                    timer_setting["on"][value] = delta.get(value)
-                elif "off" in value:
-                    timer_setting["off"][value] = delta.get(value)
                 logger.info("set {} at {}".format(value,delta.get(value)))
 
     # Update a Shadow
@@ -150,12 +144,10 @@ deviceShadowHandler.shadowRegisterDeltaCallback(customShadowCallback_DeltaUpdate
 while True:
     # check timer
     for value in timer_mode:
-        if timer_setting[value]["active"] == 1:
+        if device_shadow["state"]["reported"][value] == 1:
             nowtime = datetime.datetime.now()
-            settime = datetime.datetime.combine(nowtime.date(),datetime.datetime.strptime(timer_setting[value][value + "time"],"%H:%M").time())
-            print("settime:"+settime)
+            settime = datetime.datetime.combine(nowtime.date(),datetime.datetime.strptime(device_shadow["state"]["rereported"][value],"%H:%M").time())
             deltatime = nowtime - settime
-            print("deltatime:"+deltatime)
             if abs(deltatime.total_seconds()) < 60:
                 if value == "on":
                     if temperature < 20 :
