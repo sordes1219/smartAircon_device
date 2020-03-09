@@ -148,7 +148,7 @@ while True:
             nowtime = datetime.datetime.now()
             settime = datetime.datetime.combine(nowtime.date(),datetime.datetime.strptime(device_shadow["state"]["reported"]["{}time".format(value)],"%H:%M").time())
             deltatime = nowtime - settime
-            if abs(deltatime.total_seconds()) < 60:
+            if (deltatime.total_seconds() < 60) & (deltatime.total_seconds() > 0):
                 if value == "on":
                     if temperature < 20 :
                         cmd = "python3 irrp.py -p -g17 -f codes aircon:heating"
