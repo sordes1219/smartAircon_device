@@ -146,7 +146,7 @@ while True:
     for value in timer_mode:
         if device_shadow["state"]["reported"][value] == 1:
             nowtime = datetime.datetime.now()
-            settime = datetime.datetime.combine(nowtime.date(),datetime.datetime.strptime(device_shadow["state"]["rereported"][value],"%H:%M").time())
+            settime = datetime.datetime.combine(nowtime.date(),datetime.datetime.strptime(device_shadow["state"]["reported"][value],"%H:%M").time())
             deltatime = nowtime - settime
             if abs(deltatime.total_seconds()) < 60:
                 if value == "on":
