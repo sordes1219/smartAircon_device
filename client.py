@@ -163,8 +163,11 @@ while True:
                     subprocess.check_call(cmd.split())
                     logger.info("turn off aircon")
 
+                # Update a Shadow
+                deviceShadowHandler.shadowUpdate(json.dumps(device_shadow),customShadowCallback_Update, 5)
+
     # Send air condition per 60sec
-    time.sleep(10)
+    time.sleep(60)
     result = instance.read()
     if result.is_valid():
         temperature = result.temperature
