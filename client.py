@@ -154,14 +154,18 @@ while True:
                         cmd = "python3 irrp.py -p -g17 -f codes aircon:heating"
                         subprocess.check_call(cmd.split())
                         logger.info("turn on heating")
+                        device_shadow["state"]["reported"]["heating"] = 1
                     else:
                         cmd = "python3 irrp.py -p -g17 -f codes aircon:cooler"
                         subprocess.check_call(cmd.split())
                         logger.info("turn on cooler")
+                        device_shadow["state"]["reported"]["cooler"] = 1
                 elif value == "off":
                     cmd = "python3 irrp.py -p -g17 -f codes aircon:stop"
                     subprocess.check_call(cmd.split())
                     logger.info("turn off aircon")
+                    for v in action_mode:
+                        device_shadow["state"]["reported"][v] = 0
 
                 # Update a Shadow
                 deviceShadowHandler.shadowUpdate(json.dumps(device_shadow),customShadowCallback_Update, 5)
