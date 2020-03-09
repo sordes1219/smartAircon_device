@@ -18,10 +18,10 @@ logger = applogger.logger
 
 # Init GPIO
 LED = 17
-GPIO.cleanup()
 GPIO.setwarnings(True)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(LED,GPIO.OUT)
+GPIO.cleanup()
 
 # read data using pin 14
 instance = dht11.DHT11(pin=14)
@@ -170,6 +170,7 @@ while True:
     # Send air condition per 60sec
     time.sleep(10)
     result = instance.read()
+    # print(result.is_valid())
     if result.is_valid():
         temperature = result.temperature
         humidity = result.humidity
