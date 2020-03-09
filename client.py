@@ -21,6 +21,7 @@ LED = 17
 GPIO.setwarnings(True)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(LED,GPIO.OUT)
+GPIO.cleanup()
 
 # read data using pin 14
 instance = dht11.DHT11(pin=14)
@@ -75,10 +76,6 @@ def customShadowCallback_Update(payload, responseStatus, token):
 # Function called when a shadow-delta is updated
 def customShadowCallback_DeltaUpdate(payload, responseStatus, token):
 
-    # tempolary dictionary for making payload
-    d1 = {}
-    d2 = {}
-    d3 = {}
     zero_counter = 0
 
     # Display status and data from Update request
