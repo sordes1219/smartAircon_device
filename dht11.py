@@ -37,7 +37,7 @@ class DHT11:
         self.__send_and_sleep(RPi.GPIO.HIGH, 0.05)
 
         # pull down to low
-        self.__send_and_sleep(RPi.GPIO.LOW, 0.02)
+        self.__send_and_sleep(RPi.GPIO.LOW, 0.025)
 
         # change to input using pull up
         RPi.GPIO.setup(self.__pin, RPi.GPIO.IN, RPi.GPIO.PUD_UP)
